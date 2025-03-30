@@ -10,6 +10,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Download Build Archive (if using GitHub Releases)
+        run: wget -O build.xcarchive.zip "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/YOUR_TAG/build.xcarchive.zip"
+
       - name: Unzip Archive
         run: unzip build.xcarchive.zip
 
@@ -20,8 +23,8 @@ jobs:
             -exportPath output_folder \
             -exportOptionsPlist exportOptions.plist
 
-      - name: Upload IPA
+      - name: Upload IPA as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: app
+          name: exported-ipa
           path: output_folder/*.ipa

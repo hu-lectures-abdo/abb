@@ -11,7 +11,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download Build Archive (if using GitHub Releases)
-        run: wget -O build.xcarchive.zip "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/YOUR_TAG/build.xcarchive.zip"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          wget --header="Authorization: token $GH_TOKEN" -O build.xcarchive.zip "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/YOUR_TAG/build.xcarchive.zip"
 
       - name: Unzip Archive
         run: unzip build.xcarchive.zip
@@ -24,7 +27,7 @@ jobs:
             -exportOptionsPlist exportOptions.plist
 
       - name: Upload IPA as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exported-ipa
           path: output_folder/*.ipa
